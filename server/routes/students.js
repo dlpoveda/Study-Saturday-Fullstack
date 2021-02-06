@@ -5,7 +5,7 @@ const { Student, Test } = require('../db/models');
 router.get('/', async (req, res, next) => {
   try {
     const students = await Student.findAll({
-      include: Test
+      include: Test,
     });
     res.json(students);
   } catch (error) {
@@ -25,7 +25,15 @@ router.get('/:id', async (req, res, next) => {
 });
 
 // POST /api/students
-
+router.post('/', async (req, res, next) => {
+  try {
+    const { firstName, lastName, email } = req.body;
+    const newStudent = await Student.create({ firstName, lastName, email });
+    res.status(201).json(newStudent);
+  } catch (error) {
+    next(error);
+  }
+});
 
 // PUT /api/students/:id
 router.put('/:id', async (req, res, next) => {
@@ -35,7 +43,7 @@ router.put('/:id', async (req, res, next) => {
     const updatedStudent = await student.update({
       firstName,
       lastName,
-      email
+      email,
     });
     res.json(updatedStudent);
   } catch (error) {
